@@ -5,14 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import zingg.common.client.ClientOptions;
-import zingg.common.client.IArguments;
-import zingg.common.client.ILabelDataViewHelper;
-import zingg.common.client.ITrainingDataModel;
-import zingg.common.client.IZingg;
-import zingg.common.client.MatchType;
-import zingg.common.client.ZFrame;
-import zingg.common.client.ZinggClientException;
+import zingg.common.client.*;
 import zingg.common.client.options.ZinggOption;
 import zingg.common.client.options.ZinggOptions;
 import zingg.common.client.util.ColName;
@@ -231,6 +224,11 @@ public abstract class ZinggBase<S,D, R, C, T> implements Serializable, IZingg<S,
     @Override  
     public ILabelDataViewHelper<S, D, R, C> getLabelDataViewHelper() throws UnsupportedOperationException {
     	throw new UnsupportedOperationException("not implement in "+this.getClass());
+    }
+
+    @Override
+    public IClusterDataHandler<S, D, R, C> getClusterDataHandler() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("not implement in "+this.getClass());
     }
     
  }
