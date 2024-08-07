@@ -1,6 +1,7 @@
 package zingg.common.core.executor;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,62 +25,24 @@ public class LabelDataViewHelper<S,D,R,C,T> extends ZinggBase<S, D, R, C, T> imp
 		setClientOptions(clientOptions);
 		setName(this.getClass().getName());
 	}
-	
-	@Override
-	public ZFrame<D,R,C>  getClusterIdsFrame(ZFrame<D,R,C>  lines) {
-		return 	lines.select(ColName.CLUSTER_COLUMN).distinct();		
-	}
 
-	
 	@Override
-	public List<R>  getClusterIds(ZFrame<D,R,C>  lines) {
-		return 	lines.collectAsList();		
-	}
-
-	
-//	@Override
-//	public List<C> getDisplayColumns(ZFrame<D,R,C>  lines, IArguments args) {
-//		return getDSUtil().getFieldDefColumns(lines, args, false, args.getShowConcise());
-//	}
-//
-	
-	@Override
-	public ZFrame<D,R,C>  getCurrentPair(ZFrame<D,R,C>  lines, int index, List<R>  clusterIds, ZFrame<D,R,C>  clusterLines) {
-		return lines.filter(lines.equalTo(ColName.CLUSTER_COLUMN,
-			clusterLines.getAsString(clusterIds.get(index), ColName.CLUSTER_COLUMN))).cache();
-	}
-
-	
-	@Override
-	public double getScore(ZFrame<D,R,C>  currentPair) {
-		return currentPair.getAsDouble(currentPair.head(),ColName.SCORE_COL);
-	}
-
-	
-	@Override
-	public double getPrediction(ZFrame<D,R,C>  currentPair) {
-		return currentPair.getAsDouble(currentPair.head(), ColName.PREDICTION_COL);
-	}
-
-	
-	@Override
-	public String getMsg1(int index, int totalPairs) {
+	public String formatLabelingProgress(int index, int totalPairs) {
 		return String.format("\tCurrent labelling round  : %d/%d pairs labelled\n", index, totalPairs);
 	}
 
-	
 	@Override
-	public String getMsg2(double prediction, double score) {
-		String msg2 = "";
-		String matchType = LabelMatchType.get(prediction).msg;
+	public String formatPredictionMessage(double prediction, double score) {
+		String predictionMessage = "";
+		String matchType = Objects.requireNonNull(LabelMatchType.get(prediction)).msg; //Added a null check
 		if (prediction == ColValues.IS_NOT_KNOWN_PREDICTION) {
-			msg2 = String.format(
+			predictionMessage = String.format(
 					"\tZingg does not do any prediction for the above pairs as Zingg is still collecting training data to build the preliminary models.");
 		} else {
-			msg2 = String.format("\tZingg predicts the above records %s with a similarity score of %.2f",
+			predictionMessage = String.format("\tZingg predicts the above records %s with a similarity score of %.2f",
 					matchType, Math.floor(score * 100) * 0.01);
 		}
-		return msg2;
+		return predictionMessage;
 	}
 	
 	

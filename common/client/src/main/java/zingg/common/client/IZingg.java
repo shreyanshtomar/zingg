@@ -41,5 +41,6 @@ public interface IZingg<S,D,R,C> {
 	public ITrainingDataModel<S, D, R, C> getTrainingDataModel() throws UnsupportedOperationException;
 	
 	public ILabelDataViewHelper<S, D, R, C> getLabelDataViewHelper() throws UnsupportedOperationException;
+	public IClusterDataHandler<S, D, R, C> getClusterDataHandler() throws UnsupportedOperationException;
 	
 }
